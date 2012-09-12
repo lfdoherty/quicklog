@@ -19,6 +19,23 @@ exports.setLevelNone = function(){
 	level = 3
 }
 
+var loggers = []
+function uncaughtListener(err) {
+	console.log('Caught exception: ' + err);
+	process.removeListener('uncaughtException', uncaughtListener)
+	var left = loggers.length
+	for(var i=0;i<loggers.length;++i){
+		var logger = loggers[i]
+		logger._flush(function(){
+			--left
+			if(left === 0){
+				throw err
+			}
+		})
+	}
+}
+process.on('uncaughtException', uncaughtListener);
+
 function Logger(ws){
 	this.ws = ws
 	this.then = Date.now()
@@ -29,9 +46,11 @@ function Logger(ws){
 	this.loggerHandle.info = this._info.bind(this)
 	this.loggerHandle.warn = this._warn.bind(this)
 	this.loggerHandle.err = this._err.bind(this)
+	loggers.push(this)
 }
-Logger.prototype._flush = function flush(){
+Logger.prototype._flush = function flush(cb){
 	this.ws.write(this.cache)
+	this.ws.flush(cb)
 	this.cache = ''
 }
 Logger.prototype._logger = function(arr){
