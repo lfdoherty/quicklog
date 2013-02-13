@@ -21,8 +21,9 @@ exports.setLevelNone = function(){
 
 var loggers = []
 function uncaughtListener(err) {
-	console.log('Caught exception: ' + err);
+	console.log('[quicklog] Caught exception: ' + err);
 	console.log(err.stack)
+	console.log(err)
 	process.removeListener('uncaughtException', uncaughtListener)
 	var left = loggers.length
 	for(var i=0;i<loggers.length;++i){
