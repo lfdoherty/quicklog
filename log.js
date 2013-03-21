@@ -52,7 +52,7 @@ function Logger(ws){
 }
 Logger.prototype._flush = function flush(cb){
 	this.ws.write(this.cache)
-	this.ws.flush(cb)
+	//this.ws.flush(cb)
 	this.cache = ''
 }
 Logger.prototype._logger = function(arr){

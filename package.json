@@ -1,6 +1,6 @@
 {
 	"name": "quicklog",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"description": "Because there aren't enough logging libraries.",
 	"author": "Liam Doherty",
 	"main": "log",
